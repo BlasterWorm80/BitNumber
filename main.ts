@@ -1,19 +1,6 @@
-let ClearTime = 0
-let E = 0
-let ShowTime = 0
-let D = 0
-let C = 0
-let B = 0
-let A = 0
-let A1 = 0
-let Brightness2 = 0
-let B1 = 0
-let C1 = 0
-let D1 = 0
-let E1 = 0
-let Number2 = 0
-let Brightness1 = 0
 function ShowDigit () {
+    let ShowTime = 0
+    let ClearTime = 0
     basic.clearScreen()
     basic.pause(ClearTime)
     basic.showNumber(E)
@@ -136,24 +123,19 @@ function ShowBar () {
     }
 }
 input.onButtonPressed(Button.A, function () {
-    Number2 = randint(0, 99999)
-    ShowTime = 500
-    ClearTime = 250
+    Threshold += -8
+    basic.showNumber(Threshold)
     basic.clearScreen()
-    basic.showNumber(Number2)
+})
+input.onButtonPressed(Button.AB, function () {
+    basic.showNumber(Threshold)
+    Threshold = 64
     basic.clearScreen()
-    FindDigit()
-    ShowDigit()
 })
 input.onButtonPressed(Button.B, function () {
-    Number2 = randint(0, 99999)
-    Brightness1 = 255
-    Brightness2 = 64
+    Threshold += 8
+    basic.showNumber(Threshold)
     basic.clearScreen()
-    basic.showNumber(Number2)
-    basic.clearScreen()
-    FindDigit()
-    ShowBar()
 })
 function FindDigit () {
     A = Number2 % 10
@@ -162,3 +144,30 @@ function FindDigit () {
     D = Math.round((Number2 - C * 100) % 10000 / 1000)
     E = Math.round((Number2 - D * 1000) % 100000 / 10000)
 }
+let Brightness1 = 0
+let Number2 = 0
+let E1 = 0
+let D1 = 0
+let C1 = 0
+let B1 = 0
+let Brightness2 = 0
+let A1 = 0
+let A = 0
+let B = 0
+let C = 0
+let D = 0
+let E = 0
+let Threshold = 0
+Threshold = 64
+basic.forever(function () {
+    Number2 = input.soundLevel()
+    Brightness1 = 255
+    Brightness2 = 64
+    basic.clearScreen()
+    FindDigit()
+    ShowBar()
+    if (input.soundLevel() >= Threshold) {
+        music.playTone(880, music.beat(BeatFraction.Whole))
+    }
+    basic.pause(1000)
+})
